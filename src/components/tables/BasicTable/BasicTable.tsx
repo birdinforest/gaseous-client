@@ -106,6 +106,7 @@ export const BasicTable: React.FC = () => {
           ],
         },
       ],
+      // @ts-ignore
       onFilter: (value: string | number | boolean, record: BasicTableRow) => record.name.includes(value.toString()),
     },
     {

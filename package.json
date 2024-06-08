@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
-    "@craco/craco": "^6.1.2",
+    "@craco/craco": "^7.1.0",
     "@lit-labs/react": "^1.0.2",
     "@react-google-maps/api": "^2.18.1",
     "@reduxjs/toolkit": "^1.7.1",
@@ -42,7 +42,7 @@
     "react-responsive": "^9.0.2",
     "react-router-dom": "^6.0.2",
     "react-router-hash-link": "^2.4.3",
-    "react-scripts": "4.0.3",
+    "react-scripts": "5.0.1",
     "react-simple-maps": "^2.3.0",
     "react-slick": "^0.28.1",
     "react-verification-input": "^2.0.3",
@@ -68,14 +68,15 @@
     "workbox-streams": "^5.1.3"
   },
   "scripts": {
-    "start": "yarn buildThemes && craco start",
-    "build": "yarn buildThemes && craco build",
-    "test": "craco test",
+    "start": "cross-env NODE_OPTIONS=--openssl-legacy-provider yarn buildThemes && craco start",
+    "build": "cross-env NODE_OPTIONS=--openssl-legacy-provider yarn buildThemes && craco build",
+    "test": "cross-env NODE_OPTIONS=--openssl-legacy-provider craco test",
     "eject": "craco eject",
     "lint": "eslint \"*/**/*.{js,ts,tsx}\" --fix",
     "lint:styles": "stylelint '*/**/*.{js,ts,tsx}'",
     "prepare": "husky install",
-    "buildThemes": "lessc --js --clean-css=\"--s1 --advanced\" src/styles/themes/main.less public/themes/main.css"
+    "buildThemes": "lessc --js --clean-css=\"--s1 --advanced\" src/styles/themes/main.less public/themes/main.css",
+    "prettier": "npx prettier --write ."
   },
   "browserslist": [
     ">0.2%",
@@ -99,6 +100,7 @@
     "@typescript-eslint/eslint-plugin": "^5.10.0",
     "@typescript-eslint/parser": "^5.8.0",
     "craco-alias": "^3.0.1",
+    "cross-env": "^7.0.3",
     "eslint": "^7.28.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
@@ -120,7 +122,7 @@
     "*/**/*.{js,ts,tsx}": "yarn lint"
   },
   "engines": {
-    "node": "16.x"
+    "node": "20.x"
   },
   "resolutions": {
     "@types/react": "^18.0.28",
