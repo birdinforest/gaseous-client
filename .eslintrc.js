@@ -12,16 +12,17 @@ module.exports = {
       version: 'detect', // Tells eslint-plugin-react to automatically detect the version of React to use
     },
   },
-  plugins: [],
+  plugins: ['prettier'],
   extends: [
     './.eslint-extends.js',
     'prettier', // This disables ESLint rules that might conflict with prettier formatting
     'plugin:prettier/recommended', // Makes prettier errors display as ESLint errors
   ],
   rules: {
-    'linebreak-style': ['error', 'unix'], // or "windows" depending on your preference
+    'linebreak-style': 0, // or 'linebreak-style': ['error', 'unix'], // or "windows" depending on your preference
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
+    'prettier/prettier': 'error',
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
   },

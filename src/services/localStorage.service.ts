@@ -1,4 +1,5 @@
 import { UserModel } from '@app/domain/UserModel';
+
 const avatarImg = process.env.REACT_APP_ASSETS_BUCKET + '/avatars/avatar5.webp';
 
 const testUser = {
@@ -45,7 +46,20 @@ export const persistUser = (user: UserModel): void => {
 export const readUser = (): UserModel | null => {
   const userStr = localStorage.getItem('user');
 
-  return userStr ? JSON.parse(userStr) : testUser;
+  console.log('localStorage.service#readUser: userStr', userStr);
+
+  if (userStr && userStr !== 'undefined' && userStr !== 'null') {
+    try {
+      return JSON.parse(userStr);
+    } catch (error) {
+      console.error('localStorage.service#readUser: error', error);
+      return testUser as UserModel;
+    }
+  }
+
+  console.log('localStorage.service#readUser: return testUser', testUser);
+
+  return testUser as UserModel;
 };
 
 export const deleteToken = (): void => localStorage.removeItem('accessToken');

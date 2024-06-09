@@ -1,5 +1,5 @@
 import { httpApi } from '@app/api/http.api';
-import './mocks/auth.api.mock';
+// import './mocks/auth.api.mock';
 import { UserModel } from '@app/domain/UserModel';
 
 export interface AuthData {
@@ -29,15 +29,26 @@ export interface NewPasswordData {
 export interface LoginRequest {
   email: string;
   password: string;
+  rememberMe: boolean;
 }
 
 export interface LoginResponse {
-  token: string;
-  user: UserModel;
+  token?: string;
+  user?: UserModel;
 }
 
-export const login = (loginPayload: LoginRequest): Promise<LoginResponse> =>
-  httpApi.post<LoginResponse>('login', { ...loginPayload }).then(({ data }) => data);
+export const login = (loginPayload: LoginRequest): Promise<LoginResponse> => {
+  console.log('auth.api#login: loginPayload', loginPayload);
+  return httpApi
+    .post<LoginResponse>('Account/Login', { ...loginPayload })
+    .then(({ data }) => {
+      console.log('auth.api#login: data', data);
+      return data;
+    })
+    .catch((error) => {
+      throw new Error(error.message || 'An error occurred while logging in');
+    });
+};
 
 export const signUp = (signUpData: SignUpRequest): Promise<undefined> =>
   httpApi.post<undefined>('signUp', { ...signUpData }).then(({ data }) => data);

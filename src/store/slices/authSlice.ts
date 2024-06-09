@@ -1,15 +1,15 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
-  ResetPasswordRequest,
   login,
   LoginRequest,
+  NewPasswordData,
+  resetPassword,
+  ResetPasswordRequest,
+  SecurityCodePayload,
+  setNewPassword,
   signUp,
   SignUpRequest,
-  resetPassword,
   verifySecurityCode,
-  SecurityCodePayload,
-  NewPasswordData,
-  setNewPassword,
 } from '@app/api/auth.api';
 import { setUser } from '@app/store/slices/userSlice';
 import { deleteToken, deleteUser, persistToken, readToken } from '@app/services/localStorage.service';
@@ -23,12 +23,18 @@ const initialState: AuthSlice = {
 };
 
 export const doLogin = createAsyncThunk('auth/doLogin', async (loginPayload: LoginRequest, { dispatch }) =>
-  login(loginPayload).then((res) => {
-    dispatch(setUser(res.user));
-    persistToken(res.token);
-
-    return res.token;
-  }),
+  login(loginPayload)
+    .then((res) => {
+      console.log('doLogin loginPayload', loginPayload, 'res', res);
+      res.user && dispatch(setUser(res.user));
+      res.token && persistToken(res.token);
+      return res;
+    })
+    .catch((error) => {
+      console.error('doLogin error', error);
+      // Throw a new Error instance with a default message if error.message is not available
+      throw new Error(error.message || 'An error occurred while logging in');
+    }),
 );
 
 export const doSignUp = createAsyncThunk('auth/doSignUp', async (signUpPayload: SignUpRequest) =>
@@ -61,7 +67,8 @@ const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(doLogin.fulfilled, (state, action) => {
-      state.token = action.payload;
+      // @ts-ignore
+      state.token = action.payload || null;
     });
     builder.addCase(doLogout.fulfilled, (state) => {
       state.token = '';

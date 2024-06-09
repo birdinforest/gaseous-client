@@ -13,11 +13,14 @@ import * as Auth from '@app/components/layouts/AuthLayout/AuthLayout.styles';
 interface LoginFormData {
   email: string;
   password: string;
+  rememberMe: boolean;
 }
 
 export const initValues: LoginFormData = {
-  email: 'hello@altence.com',
-  password: 'some-test-pass',
+  // TODO: Remove this default values in production
+  email: '',
+  password: '',
+  rememberMe: false,
 };
 
 export const LoginForm: React.FC = () => {
@@ -33,7 +36,9 @@ export const LoginForm: React.FC = () => {
       .unwrap()
       .then(() => navigate('/'))
       .catch((err) => {
-        notificationController.error({ message: err.message });
+        notificationController.error({
+          message: err?.message || 'LoginForm#handleSubmit',
+        });
         setLoading(false);
       });
   };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { BaseForm } from '@app/components/common/forms/BaseForm/BaseForm';
@@ -14,6 +14,7 @@ import { BaseAvatar } from '@app/components/common/BaseAvatar/BaseAvatar';
 
 interface LockFormData {
   password: string;
+  rememberMe: boolean;
 }
 
 const initValues = {
@@ -40,16 +41,20 @@ export const LockForm: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleSubmit = ({ password }: LockFormData) => {
+  const handleSubmit = ({ password, rememberMe }: LockFormData) => {
     setLoading(true);
-    dispatch(doLogin({ email: user?.email.name || '', password }))
+    dispatch(doLogin({ email: user?.email.name || '', password, rememberMe }))
       .unwrap()
       .then(() => {
         navigate(-1);
       })
       .catch((e) => {
+        console.error('Error in LockForm#handleSubmit:', e);
         notificationController.error({ message: e.message });
         setLoading(false);
+      })
+      .finally(() => {
+        console.log('LockForm#handleSubmit finally');
       });
   };
 
