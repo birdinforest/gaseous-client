@@ -49,21 +49,20 @@ export const loginVerify = async (): Promise<LoginResponse> => {
   }
 };
 
-export const login = (loginPayload: LoginRequest): Promise<LoginResponse> => {
+export const login = async (loginPayload: LoginRequest): Promise<LoginResponse> => {
   console.log('auth.api#login: loginPayload', loginPayload);
-  return httpApi
-    .post<LoginResponse>('Account/Login', { ...loginPayload })
-    .then(({ data }) => {
-      console.log('auth.api#login: data', data);
-      return data;
-    })
-    .catch((error) => {
-      throw new Error(error.message || 'An error occurred while logging in');
-    });
+  try {
+    const { data } = await httpApi.post<LoginResponse>('Account/Login', { ...loginPayload });
+    console.log('auth.api#login: data', data);
+    return data;
+  } catch (error) {
+    // @ts-ignore
+    throw new Error(error.message || 'An error occurred while logging in');
+  }
 };
 
 export const signUp = (signUpData: SignUpRequest): Promise<undefined> =>
-  httpApi.post<undefined>('signUp', { ...signUpData }).then(({ data }) => data);
+  httpApi.post<undefined>('Account/LogOff', { ...signUpData }).then(({ data }) => data);
 
 export const resetPassword = (resetPasswordPayload: ResetPasswordRequest): Promise<undefined> =>
   httpApi.post<undefined>('forgotPassword', { ...resetPasswordPayload }).then(({ data }) => data);
