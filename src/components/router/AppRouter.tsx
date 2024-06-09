@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import LoginPage from '@app/pages/LoginPage';
 import SignUpPage from '@app/pages/SignUpPage';
 import ForgotPasswordPage from '@app/pages/ForgotPasswordPage';
@@ -13,6 +13,8 @@ import RequireAuth from '@app/components/router/RequireAuth';
 import { withLoading } from '@app/hocs/withLoading.hoc';
 import NftDashboardPage from '@app/pages/DashboardPages/NftDashboardPage';
 import MedicalDashboardPage from '@app/pages/DashboardPages/MedicalDashboardPage';
+
+import AuthenticatedRoute from '@app/components/router/AuthenticatedRoute';
 
 // no lazy loading for auth pages to avoid flickering
 const AuthLayout = React.lazy(() => import('@app/components/layouts/AuthLayout/AuthLayout'));
@@ -119,16 +121,22 @@ const AuthLayoutFallback = withLoading(AuthLayout);
 const LogoutFallback = withLoading(Logout);
 
 export const AppRouter: React.FC = () => {
-  const protectedLayout = (
-    <RequireAuth>
-      <MainLayout />
-    </RequireAuth>
-  );
+  const protectedLayout = () => {
+    return (
+      <RequireAuth>
+        <MainLayout />
+      </RequireAuth>
+    );
+  };
+
+  // Wrap the Home component with the Authentication HOC
+  const AuthenticatedHome = AuthenticatedRoute(protectedLayout);
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={NFT_DASHBOARD_PATH} element={protectedLayout}>
+        <Route path="/" element={<AuthenticatedHome />}>
+          {/*<AuthenticatedRoute path={NFT_DASHBOARD_PATH} element={protectedLayout}>*/}
           <Route index element={<NftDashboard />} />
           <Route path={MEDICAL_DASHBOARD_PATH} element={<MedicalDashboard />} />
           <Route path="apps">

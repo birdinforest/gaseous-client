@@ -37,6 +37,18 @@ export interface LoginResponse {
   user?: UserModel;
 }
 
+export const loginVerify = async (): Promise<LoginResponse> => {
+  console.log('auth.api#loginVerify: verifying login');
+  try {
+    const { data } = await httpApi.get('Account/Profile/Basic');
+    console.log('auth.api#loginVerify: data', data);
+    return data;
+  } catch (error) {
+    // @ts-ignore
+    throw new Error(error.message || 'An error occurred while verifying login');
+  }
+};
+
 export const login = (loginPayload: LoginRequest): Promise<LoginResponse> => {
   console.log('auth.api#login: loginPayload', loginPayload);
   return httpApi
