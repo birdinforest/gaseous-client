@@ -12,7 +12,8 @@ import {
   verifySecurityCode,
 } from '@app/api/auth.api';
 import { setUser } from '@app/store/slices/userSlice';
-import { deleteToken, deleteUser, persistToken, readToken } from '@app/services/localStorage.service';
+import { deleteToken, deleteUser, readToken, testUser } from '@app/services/localStorage.service';
+import { UserModel } from '@app/domain/UserModel';
 
 export interface AuthSlice {
   token: string | null;
@@ -26,8 +27,10 @@ export const doLogin = createAsyncThunk('auth/doLogin', async (loginPayload: Log
   login(loginPayload)
     .then((res) => {
       console.log('doLogin loginPayload', loginPayload, 'res', res);
-      res.user && dispatch(setUser(res.user));
-      res.token && persistToken(res.token);
+      // TODO: Set real user.
+      dispatch(setUser(testUser as UserModel));
+      // res.user && dispatch(setUser(res.user));
+      // res.token && persistToken(res.token);
       return res;
     })
     .catch((error) => {
