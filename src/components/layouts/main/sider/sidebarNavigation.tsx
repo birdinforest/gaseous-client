@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  BlockOutlined,
   CompassOutlined,
   DashboardOutlined,
   FormOutlined,
@@ -8,7 +9,6 @@ import {
   LineChartOutlined,
   TableOutlined,
   UserOutlined,
-  BlockOutlined,
 } from '@ant-design/icons';
 import { ReactComponent as NftIcon } from '@app/assets/icons/nft-icon.svg';
 
@@ -22,10 +22,17 @@ export interface SidebarNavigationItem {
 
 export const sidebarNavigation: SidebarNavigationItem[] = [
   {
+    title: 'common.dashboard',
+    key: 'dashboard',
+    // TODO use path variable
+    url: '/',
+    icon: <NftIcon />,
+  },
+  {
     title: 'common.nft-dashboard',
     key: 'nft-dashboard',
     // TODO use path variable
-    url: '/',
+    url: '/ntf-dashboard',
     icon: <NftIcon />,
   },
   {

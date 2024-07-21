@@ -11,10 +11,12 @@ import MainLayout from '@app/components/layouts/main/MainLayout/MainLayout';
 import ProfileLayout from '@app/components/profile/ProfileLayout';
 import RequireAuth from '@app/components/router/RequireAuth';
 import { withLoading } from '@app/hocs/withLoading.hoc';
+import DashboardPage from '@app/pages/DashboardPages/DashboardPage';
 import NftDashboardPage from '@app/pages/DashboardPages/NftDashboardPage';
 import MedicalDashboardPage from '@app/pages/DashboardPages/MedicalDashboardPage';
 
 import AuthenticatedRoute from '@app/components/router/AuthenticatedRoute';
+import GameDetailsPage from '@app/pages/GameDetail';
 
 // no lazy loading for auth pages to avoid flickering
 const AuthLayout = React.lazy(() => import('@app/components/layouts/AuthLayout/AuthLayout'));
@@ -62,11 +64,13 @@ const ReactSimpleMaps = React.lazy(() => import('@app/pages/maps/ReactSimpleMaps
 const PigeonsMaps = React.lazy(() => import('@app/pages/maps/PigeonsMapsPage/PigeonsMapsPage'));
 const Logout = React.lazy(() => import('./Logout'));
 
-export const NFT_DASHBOARD_PATH = '/';
+export const NFT_DASHBOARD_PATH = '/ntf-dashboard';
 export const MEDICAL_DASHBOARD_PATH = '/medical-dashboard';
+export const DASHBOARD_PATH = '/';
 
 const MedicalDashboard = withLoading(MedicalDashboardPage);
 const NftDashboard = withLoading(NftDashboardPage);
+const Dashboard = withLoading(DashboardPage);
 const NewsFeed = withLoading(NewsFeedPage);
 const AdvancedForm = withLoading(AdvancedFormsPage);
 
@@ -137,7 +141,8 @@ export const AppRouter: React.FC = () => {
       <Routes>
         <Route path="/" element={<AuthenticatedHome />}>
           {/*<AuthenticatedRoute path={NFT_DASHBOARD_PATH} element={protectedLayout}>*/}
-          <Route index element={<NftDashboard />} />
+          <Route index element={<Dashboard />} />
+          <Route path={NFT_DASHBOARD_PATH} element={<NftDashboard />} />
           <Route path={MEDICAL_DASHBOARD_PATH} element={<MedicalDashboard />} />
           <Route path="apps">
             <Route path="feed" element={<NewsFeed />} />
@@ -207,6 +212,7 @@ export const AppRouter: React.FC = () => {
           <Route path="new-password" element={<NewPasswordPage />} />
         </Route>
         <Route path="/logout" element={<LogoutFallback />} />
+        <Route path="/games/:gameId" element={<GameDetailsPage />} />
       </Routes>
     </BrowserRouter>
   );

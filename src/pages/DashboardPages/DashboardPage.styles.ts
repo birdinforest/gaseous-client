@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { LAYOUT, media } from '@app/styles/themes/constants';
 import { BaseCol } from '@app/components/common/BaseCol/BaseCol';
+import { BaseTypography } from '@app/components/common/BaseTypography/BaseTypography';
 
 export const RightSideCol = styled(BaseCol)`
   padding: ${LAYOUT.desktop.paddingVertical} ${LAYOUT.desktop.paddingHorizontal};
@@ -53,4 +54,12 @@ export const Item = styled.div`
   background: red;
   height: 150px;
   flex-shrink: 0;
+`;
+
+export const Text = styled(BaseTypography.Text)`
+  color: var(--text-main-color);
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;

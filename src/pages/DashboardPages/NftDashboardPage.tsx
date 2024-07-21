@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { PageTitle } from '@app/components/common/PageTitle/PageTitle';
 import { References } from '@app/components/common/References/References';
 import { useResponsive } from '@app/hooks/useResponsive';
@@ -12,9 +12,27 @@ import { RecentActivity } from '@app/components/nft-dashboard/recentActivity/Rec
 import * as S from './DashboardPage.styles';
 import { BaseRow } from '@app/components/common/BaseRow/BaseRow';
 import { BaseCol } from '@app/components/common/BaseCol/BaseCol';
+import { notificationController } from '@app/controllers/notificationController';
+import { useAppDispatch } from '@app/hooks/reduxHooks';
+import { fetchGames } from '@app/store/slices/gameSlice';
 
 const MedicalDashboardPage: React.FC = () => {
   const { isDesktop } = useResponsive();
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchGames({ pageNumber: 0, pageSize: 30 }))
+      .unwrap()
+      .then((res) => {
+        console.log('fetchGames res', res);
+      })
+      .catch((err) => {
+        notificationController.error({
+          message: err?.message || 'MedicalDashboardPage#useEffect#fetchGames',
+        });
+      });
+  }, [dispatch]);
 
   const desktopLayout = (
     <BaseRow>
